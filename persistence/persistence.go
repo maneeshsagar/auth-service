@@ -33,6 +33,9 @@ func (p *PersistenceImpl) GetUserByEmail(email string) (*models.User, error) {
 	o := orm.NewOrm()
 	m := &models.User{}
 	err := o.QueryTable(new(models.User)).Filter("email", email).One(m)
+	if err != nil {
+		return nil, err
+	}
 	return m, err
 }
 func (p *PersistenceImpl) AddToken(token *models.Token) (int64, error) {
@@ -44,6 +47,9 @@ func (p *PersistenceImpl) GetToken(token string) (*models.Token, error) {
 	o := orm.NewOrm()
 	m := &models.Token{}
 	err := o.QueryTable(new(models.Token)).Filter("token", token).One(m)
+	if err != nil {
+		return nil, err
+	}
 	return m, err
 }
 
@@ -56,6 +62,9 @@ func (p *PersistenceImpl) GetRefreshToken(token string) (*models.RefreshToken, e
 	o := orm.NewOrm()
 	m := &models.RefreshToken{}
 	err := o.QueryTable(new(models.RefreshToken)).Filter("token", token).One(m)
+	if err != nil {
+		return nil, err
+	}
 	return m, err
 }
 
@@ -63,6 +72,9 @@ func (p *PersistenceImpl) GetAccesTokenByRefreshToken(refreshToken string) (*mod
 	o := orm.NewOrm()
 	m := &models.Token{}
 	err := o.QueryTable(new(models.Token)).Filter("refresh_token", refreshToken).OrderBy("-id").One(m)
+	if err != nil {
+		return nil, err
+	}
 	return m, err
 }
 
@@ -73,5 +85,8 @@ func (p *PersistenceImpl) GetUserByUserId(id int) (*models.User, error) {
 		ID: cast.ToInt64(id),
 	}
 	err := o.Read(u)
+	if err != nil {
+		return nil, err
+	}
 	return u, err
 }

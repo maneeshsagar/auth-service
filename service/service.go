@@ -31,12 +31,20 @@ func NewAuthService(persistence persistence.Persistence) Service {
 
 // this one is to add the new user into the system
 func (a *AuthService) SignUp(request *iolayer.SignUpRequest) (string, int, error) {
+
+	existingUser, err := a.Persistence.GetUserByEmail(request.Email)
+	if err != nil && err != orm.ErrNoRows {
+		return "unable to add user in db", http.StatusInternalServerError, err
+	}
+	if existingUser != nil {
+		return "this email already exists", http.StatusBadRequest, fmt.Errorf("this email already exists")
+	}
 	user := &models.User{
 		Name:     request.Name,
 		Email:    request.Email,
 		Password: request.Password,
 	}
-	_, err := a.Persistence.AddUser(user)
+	_, err = a.Persistence.AddUser(user)
 	if err != nil {
 		return "unable to add user in db", http.StatusInternalServerError, err
 	}
