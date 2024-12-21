@@ -12,7 +12,7 @@
 
 clone the Repository
 ```bash
-   git clone https://github.com/maneeshsagar/auth-service.git
+git clone https://github.com/maneeshsagar/auth-service.git
 ```
 
 run the docker compose file by below command
