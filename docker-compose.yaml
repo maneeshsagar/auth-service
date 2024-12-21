@@ -17,7 +17,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: mysql:latest
@@ -29,4 +30,8 @@ services:
       MYSQL_PASSWORD: userpassword
     ports:
       - "3306:3306"
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-puserpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
